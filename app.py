@@ -7,7 +7,7 @@ import re
 import numpy as np
 
 # Keras
-from keras.applications.imagenet_utils import preprocess_input, decode_predictions
+from keras.applications.mobilenet import preprocess_input, decode_predictions
 from keras.models import load_model
 from keras.preprocessing import image
 
@@ -29,9 +29,11 @@ MODEL_PATH = 'models/your_model.h5'
 
 # You can also use pretrained model from Keras
 # Check https://keras.io/applications/
-from keras.applications.resnet50 import ResNet50
-model = ResNet50(weights='imagenet')
+from keras.applications.mobilenet import MobileNet
+
+model = MobileNet(input_shape=(224,224,3))
 print('Model loaded. Check http://127.0.0.1:5000/')
+
 
 
 def model_predict(img_path, model):
@@ -44,7 +46,7 @@ def model_predict(img_path, model):
 
     # Be careful how your trained model deals with the input
     # otherwise, it won't make correct prediction!
-    x = preprocess_input(x, mode='caffe')
+    x = preprocess_input(x)
 
     preds = model.predict(x)
     return preds
@@ -85,3 +87,4 @@ if __name__ == '__main__':
     # Serve the app with gevent
     http_server = WSGIServer(('0.0.0.0', 5000), app)
     http_server.serve_forever()
+
